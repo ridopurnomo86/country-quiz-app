@@ -1,0 +1,21 @@
+.container {
+  min-height: 100vh;
+  background: url("./assets/background.png") transparent no-repeat bottom center / cover;
+  background-size: cover; /*for safari we can add this sperately*/
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quiz-card-wrapper {
+  width: 500px;
+  margin-inline: 32px;
+}
+
+.quiz-card-wrapper > .title-text {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 54px;
+  color: rgba(242, 242, 242, 1);
+  margin-bottom: 12px;
+}

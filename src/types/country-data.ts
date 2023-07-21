@@ -1,4 +1,7 @@
 export type CountryDataType = {
+  correctAnswer: boolean;
+  wrongAnswer: boolean;
+  isReset: boolean;
   flags: {
     png: string;
     svg: string;

@@ -56,6 +56,15 @@
     transition: background 0.3s ease-in-out;
 }
 
+.quiz-card-container > .list-answer-container > .answer-container:disabled {
+    pointer-events: none;
+}
+
+.quiz-card-container > .list-answer-container > .answer-container:disabled:hover {
+    background-color: transparent;
+    border: 2px solid rgba(96, 102, 208, 0.8);
+} 
+
 .quiz-card-container > .list-answer-container > .answer-container:last-child {
     margin-bottom: 0;
 }

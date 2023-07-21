@@ -1,8 +1,12 @@
-.container {
-  min-height: 100vh;
+.main-container {
   background: url("./assets/background.png") transparent no-repeat bottom center / cover;
   background-size: cover; /*for safari we can add this sperately*/
+}
+
+.container {
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }

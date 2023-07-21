@@ -1,5 +1,5 @@
 import React from "react";
-import Winners from "../../assets/winners.svg";
+import Winners from "../../../assets/winners.svg";
 import { ResultCardPropsType } from "./types";
 import "./styles.css";
 

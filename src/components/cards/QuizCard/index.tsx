@@ -1,9 +1,9 @@
 import React from "react";
 import { QuizCardPropsType } from "./types";
-import Adventure from "../../assets/adventure.svg";
+import Adventure from "../../../assets/adventure.svg";
+import CrossCircle from "../../../assets/cross-circle.svg";
+import CheckCircle from "../../../assets/check-circle.svg";
 import "./styles.css";
-import CrossCircle from "../../assets/cross-circle.svg";
-import CheckCircle from "../../assets/check-circle.svg";
 
 const ALPABETH = ["A", "B", "C", "D"];
 
@@ -33,6 +33,7 @@ const QuizCard: React.FC<QuizCardPropsType> = ({
   imgUrl,
   alt,
   isShowNext = false,
+  isChooseAnswer = false,
 }): JSX.Element => (
   <div className="quiz-card-container">
     {questionType === "flag"
@@ -47,6 +48,7 @@ const QuizCard: React.FC<QuizCardPropsType> = ({
           data-type-error={item?.wrongAnswer}
           data-type-success={item?.correctAnswer}
           onClick={() => onChooseAnswer(item)}
+          disabled={isChooseAnswer}
         >
           <div className="flex-container">
             <p className="choose-text">{ALPABETH[idx]}</p>

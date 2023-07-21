@@ -1,69 +1,66 @@
-import { useCallback, useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import useGetCountry from "./useGetCountry";
-import { QuestionType } from "../cards/QuizCard/types";
+import { QuestionType } from "../components/cards/QuizCard/types";
 import { CountryDataType } from "../types/country-data";
 import { getRandomNumber } from "../modules/randomNumber";
 
 const useQuiz = () => {
-  const { countries } = useGetCountry();
-  const [typeQuestion, setTypeQuestion] = useState<QuestionType>();
-  const [countrySelection, setCountrySelection] = useState<CountryDataType>(
-    {} as CountryDataType
-  );
-  const answersRef = useRef(null);
+  const totalAnswerRef = useRef(0);
+  const nextQuestionRef = useRef(false);
+  const resetQuestionRef = useRef(false);
 
-  const generateTypeQuestion = useCallback(() => {
+  const { countries, randomCountries, selectedCountry } = useGetCountry([
+    nextQuestionRef.current,
+  ]);
+  const [isNext, setIsNext] = useState<boolean>(false);
+  const [typeQuestion, setTypeQuestion] = useState<QuestionType>();
+
+  const generateTypeQuestion = () => {
     const typeQuestion = ["flag", "capital"];
     setTypeQuestion(typeQuestion[getRandomNumber(2)] as QuestionType);
-  }, []);
-
-  const handleSelectionCountry = () => {
-    const idx = getRandomNumber(Number(countries.length));
-    if (countries[idx]) {
-      setCountrySelection(countries[idx]);
-    }
   };
 
-  const generateAnswer = useCallback(() => {
-    if (countries) {
-      const answers = [...Array(3).keys()].map(() => ({
-        ...countries[getRandomNumber(Number(countries.length))],
-      }));
-
-      answers.push(countrySelection);
-
-      answers.sort(() => Math.random() - 0.5);
-
-      answersRef.current = answers;
-    }
-    return null;
-  }, [countries]);
-
   useEffect(() => {
-    handleSelectionCountry();
     generateTypeQuestion();
   }, [countries]);
 
-  useEffect(() => {
-    generateAnswer();
-  }, [countrySelection, countries, typeQuestion, generateAnswer]);
-
-  console.log(answersRef.current);
-
   const handleChooseAnswer = (item: CountryDataType) => {
-    // if (item.name.common === countrySelection.name.common)
-    //   return setCountrySelection((prev) => ({ ...prev, correctAnswer: true }));
-    // if (item.name.common !== countrySelection.name.common) {
-    //   item.wrongAnswer = true;
-    //   setCountrySelection((prev) => ({ ...prev, correctAnswer: true }));
-    // }
+    setIsNext((prev) => !prev);
+
+    if (item.name.common === selectedCountry?.name.common) {
+      totalAnswerRef.current += 1;
+      selectedCountry.correctAnswer = true;
+    }
+
+    if (item.name.common !== selectedCountry?.name.common) {
+      (selectedCountry as CountryDataType).correctAnswer = true;
+      (selectedCountry as CountryDataType).isReset = true;
+      item.wrongAnswer = true;
+    }
+  };
+
+  const handleNextQuestion = () => {
+    setIsNext((prev) => !prev);
+    if ((selectedCountry as CountryDataType).isReset)
+      return (resetQuestionRef.current = !resetQuestionRef.current);
+    return (nextQuestionRef.current = !nextQuestionRef.current);
+  };
+
+  const handleResetQuiz = () => {
+    totalAnswerRef.current = 0;
+    return window.location.reload();
   };
 
   return {
     typeQuestion,
-    countrySelection,
-    answers: answersRef.current,
+    countrySelection: selectedCountry,
+    answers: randomCountries,
     handleChooseAnswer,
+    handleNextQuestion,
+    handleResetQuiz,
+    isNext,
+    isResetQuestion: resetQuestionRef.current,
+    totalCorrect: totalAnswerRef.current,
   };
 };
 

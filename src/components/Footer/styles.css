@@ -7,7 +7,7 @@
     padding-block: 2rem;
 }
 
-.title-text {
+.footer-container > .title-text {
     font-size: 14px;
     font-weight: 500;
     line-height: 17px;
